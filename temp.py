@@ -1,17 +1,5 @@
 from tkinter import *
 from textwrap3 import wrap
-from AppOpener import run
-
-from io import StringIO # Python3 use: from io import StringIO
-import sys
-
-old_stdout = sys.stdout
-
-# blah blah lots of code ...
-
-
-
-# examine mystdout.getvalue()
 
 # GUI
 root = Tk()
@@ -45,21 +33,13 @@ def gpt(query):
 
 # Send function
 def send():
-	send_this = "You : " + e.get()
-	txt.insert(END, "\n" + send_this)
+	send = "You : " + e.get()
+	txt.insert(END, "\n" + send)
 	user = e.get().lower()
-	try:
-		if user[0:2]=="-o":
-			app = user[2:].strip()
-			sys.stdout = mystdout = StringIO()
-			old_stdout = sys.stdout
-			run(app)
-			answer = mystdout.getvalue()
-		else:
-			answer = gpt(user)
-	except:
-		answer="Enter valid input!"
-	txt.insert(END, "\n" + "Bot : "+answer)
+	answer = gpt(user)
+	txt.insert(END, "\n")
+	for ans in wrap("Bot : "+answer,width=65):
+		txt.insert(END, ans+"\n" )
 	e.delete(0, END)
 
 

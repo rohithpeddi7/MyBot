@@ -1,3 +1,4 @@
+appopener==1.4
 certifi==2022.12.7
 charset-normalizer==2.1.1
 colorama==0.4.6
