@@ -2,7 +2,7 @@ import pyttsx3
 import datetime
 import speech_recognition as sr
 import time
-user = "Rohith" #Change name as per user's name
+user = "gaurav" #Change name as per user's name
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
