@@ -2,6 +2,11 @@ from tkinter import *
 from textwrap3 import wrap
 from AppOpener import run
 import pywhatkit as pwt
+import os
+import time
+import webbrowser as web
+from platform import system
+from typing import Optional
 
 from io import StringIO # Python3 use: from io import StringIO
 import sys
@@ -20,7 +25,7 @@ FONT_BOLD = "Helvetica 13 bold"
 import os
 import openai
 
-openai.api_key = "sk-LfURf8m7mqGQZ9PIR1Y2T3BlbkFJD4poErFSUfCvn4EhV"# add X2m at end
+openai.api_key = "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"# add yQQ at end
 os.environ["OPENAI_API_KEY"] = openai.api_key
 # openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -53,6 +58,10 @@ def all_commands():
 		ans+=str(count)+". "+cmd+" : "+func+"\n"
 	return ans
 
+def yt_play(query):
+	link = f"https://www.youtube.com/search?q={query}"
+	web.open(link)
+
 # Send function
 def send():
 	send_this = "You : " + e.get()
@@ -72,6 +81,12 @@ def send():
 				elif user[0:2]=="-s":
 					pwt.search(user[2:].strip())
 					answer="Redirecting to Google.."
+				elif user[0:2]=="-y":
+					answer="Redirecting to YouTube.."
+					yt_play(user[2:].strip())
+				# elif user[0:2]=="-i":
+				# 	answer=f"Fetching Wikipedia summary on {user[2:]}:\n"
+				# 	answer+=pwt.info(user[2:].strip()).strip()
 				else:
 					answer = gpt(user)
 			except Exception as er:
@@ -80,7 +95,7 @@ def send():
 		print(user)
 		print(type(er).__name__)
 		answer="Enter valid input! or report an error."
-	txt.insert(END, "\n" + "Bot : "+answer)
+	txt.insert(END, "\n" + "Bot : "+answer.strip()+"\n")
 	e.delete(0, END)
 
 
