@@ -11,7 +11,7 @@ import webbrowser as web
 from platform import system
 from typing import Optional
 
-version="2.1.2"
+version="2.1.22"
 
 from io import StringIO # Python3 use: from io import StringIO
 import sys
@@ -32,7 +32,7 @@ import os
 import openai
 import time
 
-openai.api_key = "sk-f8wwPabkCGGVw9DNOWZ8T3BlbkFJvwK6XXE8xRjogiUmc"# add Vgj at end
+openai.api_key = "sk-cPCUqWoutPcGih4KQjupT3BlbkFJgAmB91AJabq9YzkYh"# add yps at end
 os.environ["OPENAI_API_KEY"] = openai.api_key
 # openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -117,7 +117,7 @@ class App(customtkinter.CTk):
         self.main_button_1.grid(row=3, column=3, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
         # create textbox
-        self.textbox = customtkinter.CTkTextbox(self, width=500,height=1200)
+        self.textbox = customtkinter.CTkTextbox(self, width=500,height=1200,wrap=WORD)
         self.textbox.grid(row=0, column=1, padx=(20, 0), pady=(20, 0), sticky="nsew")
 
         # # create tabview
@@ -190,7 +190,7 @@ class App(customtkinter.CTk):
         # self.progressbar_3.grid(row=0, column=2, rowspan=5, padx=(10, 20), pady=(10, 10), sticky="ns")
 
         # set default values
-        self.sidebar_button_3.configure(state="disabled", text="Version: 2.0")
+        self.sidebar_button_3.configure(state="disabled", text="Version : "+version)
         self.checkbox_2.configure(state="disabled")
         self.switch_2.configure(state="disabled")
         self.checkbox_1.select()
