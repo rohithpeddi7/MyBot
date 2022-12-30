@@ -32,7 +32,7 @@ import os
 import openai
 import time
 
-openai.api_key = "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"# add yps at end
+openai.api_key = "sk-uYMRsOB8bSLpI2a22YGBT3BlbkFJcLJXjxsOi7Ru7VbgM"# add kC2 at end
 os.environ["OPENAI_API_KEY"] = openai.api_key
 # openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -201,6 +201,7 @@ class App(customtkinter.CTk):
         # self.slider_1.configure(command=self.progressbar_2.set)
         # self.slider_2.configure(command=self.progressbar_3.set)
         self.textbox.insert("0.0", "Conversation\n\n")
+        self.textbox.configure(state="disabled")
         self.textbox2.configure(state="disabled")
 
         # self.textbox.configure(state="disabled")
@@ -224,7 +225,7 @@ class App(customtkinter.CTk):
     def send(self):
         # self.progressbar_1.configure(mode="indeterminate")
         # self.progressbar_1.start()
-        self.textbox2.configure(state="normal")
+        self.textbox.configure(state="normal")
         e = self.entry
         txt = self.textbox
         send_this = "You : " + e.get()
@@ -259,7 +260,7 @@ class App(customtkinter.CTk):
             answer="Enter valid input! or report an error."
         txt.insert(END,"\n" + "Bot : "+answer.strip()+"\n")
         e.delete(0,END)
-        self.textbox2.configure(state="disabled")
+        self.textbox.configure(state="disabled")
         # self.progressbar_1.stop()
         # self.progressbar_1.configure(mode="determinate")
         # self.progressbar_1['value']=100
