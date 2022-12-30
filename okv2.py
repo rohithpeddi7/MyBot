@@ -32,7 +32,7 @@ import os
 import openai
 import time
 
-openai.api_key = "sk-cPCUqWoutPcGih4KQjupT3BlbkFJgAmB91AJabq9YzkYh"# add yps at end
+openai.api_key = "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"# add yps at end
 os.environ["OPENAI_API_KEY"] = openai.api_key
 # openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -156,7 +156,6 @@ class App(customtkinter.CTk):
         self.textbox2 = customtkinter.CTkTextbox(master=self.radiobutton_frame,wrap=WORD)
         self.textbox2.grid(row=5, column=2, pady=10, padx=20, sticky="n")
         self.textbox2.insert(END, "\n" + "Welcome to the next generation AI assistant!\nCreated by Rohith Peddi and Gaurav Mahendraker.\nAll rights reserved.\n\nPlease enter your query/command below.\nEnter help or -h for list of options.\n")
-        self.textbox2.configure(state="disabled")
         # self.progressbar_1 = customtkinter.CTkProgressBar(self.radiobutton_frame)
         # self.progressbar_1.grid(row=4, column=2, padx=(20, 10), pady=(10, 10), sticky="ew")
 
@@ -202,6 +201,9 @@ class App(customtkinter.CTk):
         # self.slider_1.configure(command=self.progressbar_2.set)
         # self.slider_2.configure(command=self.progressbar_3.set)
         self.textbox.insert("0.0", "Conversation\n\n")
+        self.textbox2.configure(state="disabled")
+
+        # self.textbox.configure(state="disabled")
         # self.seg_button_1.configure(values=["CTkSegmentedButton", "Value 2", "Value 3"])
         # self.seg_button_1.set("Value 2")
 
@@ -222,6 +224,7 @@ class App(customtkinter.CTk):
     def send(self):
         # self.progressbar_1.configure(mode="indeterminate")
         # self.progressbar_1.start()
+        self.textbox2.configure(state="normal")
         e = self.entry
         txt = self.textbox
         send_this = "You : " + e.get()
@@ -256,7 +259,7 @@ class App(customtkinter.CTk):
             answer="Enter valid input! or report an error."
         txt.insert(END,"\n" + "Bot : "+answer.strip()+"\n")
         e.delete(0,END)
-        time.sleep(5)
+        self.textbox2.configure(state="disabled")
         # self.progressbar_1.stop()
         # self.progressbar_1.configure(mode="determinate")
         # self.progressbar_1['value']=100
