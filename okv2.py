@@ -17,7 +17,7 @@ import sys
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
-search_engines={"0":"https://www.google.com/search?q=","1":"https://www.bing.com/search?q=","2":"https://duckduckgo.com/?q="}
+search_engines=["https://www.google.com/search?q=","https://www.bing.com/search?q=","https://duckduckgo.com/?q="]
 # se_value=0
 
 def open_github():
@@ -30,7 +30,7 @@ import os
 import openai
 import time
 
-openai.api_key = "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"# add yQQ at end
+openai.api_key = "sk-f8wwPabkCGGVw9DNOWZ8T3BlbkFJvwK6XXE8xRjogiUmc"# add Vgj at end
 os.environ["OPENAI_API_KEY"] = openai.api_key
 # openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -68,7 +68,7 @@ def yt_play(query):
 	web.open(link)
 
 def search(no,query):
-    z=str(no)[len(str(no))-1]
+    z=no.get()
     web.open(search_engines[z]+query)
 
 class App(customtkinter.CTk):
@@ -218,6 +218,7 @@ class App(customtkinter.CTk):
         # self.progressbar_1.start()
         e = self.entry
         txt = self.textbox
+        print(self.radio_var.get())
         send_this = "You : " + e.get()
         txt.insert(END,"\n" + send_this)
         user = e.get().lower().strip()
