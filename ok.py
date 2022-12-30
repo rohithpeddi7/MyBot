@@ -2,6 +2,10 @@ from tkinter import *
 from textwrap3 import wrap
 from AppOpener import run
 import pywhatkit as pwt
+import datetime as dt
+import time
+import smtplib
+ 
 
 from io import StringIO # Python3 use: from io import StringIO
 import sys
@@ -20,7 +24,7 @@ FONT_BOLD = "Helvetica 13 bold"
 import os
 import openai
 
-openai.api_key = "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"# add X2m at end
+openai.api_key = "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"# add Vgj at end
 os.environ["OPENAI_API_KEY"] = openai.api_key
 # openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -43,6 +47,8 @@ def all_commands():
 			"-s <query>":"Searches query in google",
 			"-y <query>":"Open Youtube Search",
 			"-i <query>":"Information about the <query>",
+			"-el <userid>-<password>":"login Email ",
+			"-es <reciever id>-<year>-<month>-<date>-<hour>-<minute>-<message>":"Schedule Email",
 			"-o <AppName>":"Open Application",
 			"-o ls":"List All Applications",
 			"-o find <AppName>":"Find Application",
@@ -60,6 +66,8 @@ def send():
 	send_this = "You : " + e.get()
 	txt.insert(END, "\n" + send_this)
 	user = e.get().lower().strip()
+	email_id="a"
+	password="a"
 	try:
 		if user[0:2]=="-o":
 			app = user[2:].strip()
@@ -77,6 +85,30 @@ def send():
 				elif user[0:2]=="-y":
 					pwt.playonyt(user[2:].strip())
 					answer="Redirecting to Youtube.."
+				elif user[0:3]=="-el":
+					x= user[4:].split("-")
+					email_id=x[0]
+					password=x[1]
+					answer="email logged in"
+				elif user[0:3]=="-es":
+					x= user[4:].split("-")
+					r_id=x[0]
+					year=int(x[1])
+					month=int(x[2])
+					date=int(x[3])
+					hour=int(x[4])
+					minute=int(x[5])
+					message=x[6]
+					server = smtplib.SMTP ('smtp.gmail.com', 587)
+					server.starttls()
+					server.login(email_id, password)
+					#EMAIL
+					server.sendmail(email_id, r_id, message)
+					# server.quit()
+					# send_time = dt.datetime(year,month,date,hour,minute,0) # set your sending time in UTC
+					# time.sleep(time.time() - time.time())
+					send_email()
+					answer=message+"to"+r_id
 				elif user[0:2]=="-i":
 					sys.stdout = mystdout = StringIO()
 					old_stdout = sys.stdout
