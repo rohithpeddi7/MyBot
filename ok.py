@@ -25,7 +25,7 @@ FONT_BOLD = "Helvetica 13 bold"
 import os
 import openai
 
-openai.api_key = "sk-f8wwPabkCGGVw9DNOWZ8T3BlbkFJvwK6XXE8xRjogiUmc"# add Vgj at end
+openai.api_key = "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"# add Vgj at end
 os.environ["OPENAI_API_KEY"] = openai.api_key
 # openai.api_key = os.getenv("OPENAI_API_KEY")
 

@@ -30,7 +30,7 @@ import os
 import openai
 import time
 
-openai.api_key = "sk-f8wwPabkCGGVw9DNOWZ8T3BlbkFJvwK6XXE8xRjogiUmc"# add Vgj at end
+openai.api_key = "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"# add Vgj at end
 os.environ["OPENAI_API_KEY"] = openai.api_key
 # openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -115,7 +115,7 @@ class App(customtkinter.CTk):
         self.main_button_1.grid(row=3, column=3, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
         # create textbox
-        self.textbox = customtkinter.CTkTextbox(self, width=500,height=800)
+        self.textbox = customtkinter.CTkTextbox(self, width=500,height=1200)
         self.textbox.grid(row=0, column=1, padx=(20, 0), pady=(20, 0), sticky="nsew")
 
         # # create tabview
@@ -151,6 +151,10 @@ class App(customtkinter.CTk):
         self.radio_button_2.grid(row=2, column=2, pady=10, padx=20, sticky="n")
         self.radio_button_3 = customtkinter.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=2,text="Duck Duck Go ")
         self.radio_button_3.grid(row=3, column=2, pady=10, padx=20, sticky="n")
+        self.textbox2 = customtkinter.CTkTextbox(master=self.radiobutton_frame,wrap=WORD)
+        self.textbox2.grid(row=5, column=2, pady=10, padx=20, sticky="n")
+        self.textbox2.insert(END, "\n" + "Welcome to the next generation AI assistant!\nCreated by Rohith Peddi and Gaurav Mahendraker.\nAll rights reserved.\n\nPlease enter your query/command below.\nEnter help or -h for list of options.\n")
+        self.textbox2.configure(state="disabled")
         # self.progressbar_1 = customtkinter.CTkProgressBar(self.radiobutton_frame)
         # self.progressbar_1.grid(row=4, column=2, padx=(20, 10), pady=(10, 10), sticky="ew")
 
@@ -218,7 +222,6 @@ class App(customtkinter.CTk):
         # self.progressbar_1.start()
         e = self.entry
         txt = self.textbox
-        print(self.radio_var.get())
         send_this = "You : " + e.get()
         txt.insert(END,"\n" + send_this)
         user = e.get().lower().strip()
