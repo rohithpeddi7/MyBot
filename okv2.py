@@ -10,6 +10,7 @@ import time
 import webbrowser as web
 from platform import system
 from typing import Optional
+from threading import Thread
 
 version="2.1.22"
 
@@ -37,7 +38,8 @@ os.environ["OPENAI_API_KEY"] = openai.api_key
 # openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def gpt(query):
-	response = openai.Completion.create(
+    # Thread(target=make_progress_bar_run).start()
+    response = openai.Completion.create(
 	model="text-davinci-003",
 	prompt=query,
 	temperature=0.9,
@@ -47,7 +49,20 @@ def gpt(query):
 	presence_penalty=0.6,
 	stop=[" Human:", " AI:"]
 	)
-	return response["choices"][0]["text"].strip()
+    # app.progressbar_1.configure(mode="determinate")
+    app.progressbar_1.stop()
+    app.progressbar_1.grid_remove()
+    return response["choices"][0]["text"].strip()
+
+def do_query():
+    answer = gpt(app.user)
+    e = app.entry
+    txt = app.textbox
+    txt.insert(END,"\n" + "Bot : "+answer.strip()+"\n")
+    app.textbox.configure(state="disabled")
+    app.progressbar_1.stop()
+    app.main_button_1.configure(state="enabled")
+    exit(0)
 
 def all_commands():
 	cmds = {"-h or help":"Open manual",
@@ -74,6 +89,7 @@ def search(no,query):
     web.open(search_engines[z]+query)
 
 class App(customtkinter.CTk):
+    user = ""
     def __init__(self):
         super().__init__()
 
@@ -154,10 +170,12 @@ class App(customtkinter.CTk):
         self.radio_button_3 = customtkinter.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=2,text="Duck Duck Go ")
         self.radio_button_3.grid(row=3, column=2, pady=10, padx=20, sticky="n")
         self.textbox2 = customtkinter.CTkTextbox(master=self.radiobutton_frame,wrap=WORD)
-        self.textbox2.grid(row=5, column=2, pady=10, padx=20, sticky="n")
+        self.textbox2.grid(row=4, column=2, pady=10, padx=20, sticky="n")
         self.textbox2.insert(END, "\n" + "Welcome to the next generation AI assistant!\nCreated by Rohith Peddi and Gaurav Mahendraker.\nAll rights reserved.\n\nPlease enter your query/command below.\nEnter help or -h for list of options.\n")
-        # self.progressbar_1 = customtkinter.CTkProgressBar(self.radiobutton_frame)
-        # self.progressbar_1.grid(row=4, column=2, padx=(20, 10), pady=(10, 10), sticky="ew")
+        self.progressbar_1 = customtkinter.CTkProgressBar(self.radiobutton_frame, mode="indeterminate",indeterminate_speed=1.5)
+        
+        # self.progressbar_1.start()
+        
 
         # create checkbox and switch frame
         self.checkbox_slider_frame = customtkinter.CTkFrame(self)
@@ -203,6 +221,7 @@ class App(customtkinter.CTk):
         self.textbox.insert("0.0", "Conversation\n\n")
         self.textbox.configure(state="disabled")
         self.textbox2.configure(state="disabled")
+        self.progressbar_1.pack_forget()
 
         # self.textbox.configure(state="disabled")
         # self.seg_button_1.configure(values=["CTkSegmentedButton", "Value 2", "Value 3"])
@@ -223,45 +242,52 @@ class App(customtkinter.CTk):
         print("sidebar_button click")
     
     def send(self):
-        # self.progressbar_1.configure(mode="indeterminate")
-        # self.progressbar_1.start()
+        self.progressbar_1.grid(row=5, column=2, padx=(20, 10), pady=(10, 10), sticky="ew")
+        self.progressbar_1.start()
         self.textbox.configure(state="normal")
         e = self.entry
         txt = self.textbox
         send_this = "You : " + e.get()
         txt.insert(END,"\n" + send_this)
-        user = e.get().lower().strip()
+        self.main_button_1.configure(state="disabled")
+        self.user = e.get().lower().strip()
+        e.delete(0,END)
         try:
-            if user[0:2]=="-o":
-                app = user[2:].strip()
+            if self.user[0:2]=="-o":
+                app = self.user[2:].strip()
                 sys.stdout = mystdout = StringIO()
                 old_stdout = sys.stdout
                 run(app)
                 answer = mystdout.getvalue().capitalize()
             else:
                 try:
-                    if str(user)=="-h" or str(user)=="help":
+                    if str(self.user)=="-h" or str(self.user)=="help":
                         answer=all_commands()
-                    elif user[0:2]=="-s":
-                        search(self.radio_var,user[2:].strip())
+                    elif self.user[0:2]=="-s":
+                        search(self.radio_var,self.user[2:].strip())
                         answer="Redirecting to Search Engine.."
-                    elif user[0:2]=="-y":
+                    elif self.user[0:2]=="-y":
                         answer="Redirecting to YouTube.."
-                        yt_play(user[2:].strip())
+                        yt_play(self.user[2:].strip())
                     else:
-                        answer = gpt(user)
+                        # answer = gpt(user)
+                        Thread(target=do_query).start()
+                        return
                 except Exception as er:
-                    print(user)
+                    print(self.user)
                     print(type(er).__name__)
-                    answer =gpt(user)
+                    Thread(target=do_query).start()
+                    return
         except Exception as er:
-            print(user)
+            print(self.user)
             print(type(er).__name__)
             answer="Enter valid input! or report an error."
         txt.insert(END,"\n" + "Bot : "+answer.strip()+"\n")
-        e.delete(0,END)
         self.textbox.configure(state="disabled")
-        # self.progressbar_1.stop()
+        self.main_button_1.configure(state="enabled")
+        # self.progressbar_1.end()
+        self.progressbar_1.stop()
+        self.progressbar_1.grid_remove()
         # self.progressbar_1.configure(mode="determinate")
         # self.progressbar_1['value']=100
 
